@@ -143,6 +143,141 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/goku.github.io/2019/04/17/Algorithm-1/">Algorithm-1</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-04-17  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="两数相加"><a href="#两数相加" class="headerlink" title="两数相加"></a>两数相加</h1><p>  问题描述：</p>
+<pre><code>给出两个非空的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储一位数字。
+
+如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
+
+您可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+
+示例:
+  输入：(2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+  输出：7 -&gt; 0 -&gt; 8
+  原因：342 + 465 = 807
+</code></pre><p>  分析:</p>
+<pre><code>1.先定义一个简单链表结构，一个存具体数值，一个存指向的下一个结点。
+2.从最低有效位开始相加，由于每位数字处于0...9的范围内，两数相加之和可能会溢出，使用变量保存进位，并带入下一次迭代。
+</code></pre><p>  代码：</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Definition for singly-linked list.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ListNode</span>(<span class="params">val</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.val = val;</span><br><span class="line">    <span class="keyword">this</span>.next = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* @param &#123;ListNode&#125; l1</span></span><br><span class="line"><span class="comment">* @param &#123;ListNode&#125; l2</span></span><br><span class="line"><span class="comment">* @return &#123;ListNode&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> addTwoNumbers = <span class="function"><span class="keyword">function</span>(<span class="params">l1, l2</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> dummyHead = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">var</span> p = l1, q = l2, curr = dummyHead;</span><br><span class="line">    <span class="keyword">var</span> carry = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(p != <span class="literal">null</span> || q != <span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> x = (p != <span class="literal">null</span>) ? p.val : <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">var</span> y = (q != <span class="literal">null</span>) ? q.val : <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">var</span> sum = carry + x + y;</span><br><span class="line">        carry = <span class="built_in">parseInt</span>(sum / <span class="number">10</span>); <span class="comment">// 注意取整</span></span><br><span class="line">        curr.next = <span class="keyword">new</span> ListNode(sum % <span class="number">10</span>);</span><br><span class="line">        curr = curr.next;</span><br><span class="line">        <span class="keyword">if</span>(p != <span class="literal">null</span>) p = p.next;</span><br><span class="line">        <span class="keyword">if</span>(q != <span class="literal">null</span>) q = q.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(carry &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        curr.next = <span class="keyword">new</span> ListNode(carry);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dummyHead.next;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>  复杂度分析:</p>
+<ul>
+<li><p>时间复杂度：O(max(m,n))，假设m,n分别表示l1和l2的长度，上面的算法最多重复max(m,n)次。</p>
+</li>
+<li><p>空间复杂度：O(max(m,n))，新列表的长度最多为max(m,n)+1，头结点+1。</p>
+</li>
+</ul>
+
+	
+	</div>
+  <a type="button" href="/goku.github.io/2019/04/17/Algorithm-1/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/goku.github.io/2019/04/17/import导入机制的优化/">import导入机制的优化</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-04-17  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>  在React Native中使用import A from ‘A’进行模块导入的时候，实际编译后执行的是require(‘A’)会立即执行A模块中代码。</p>
+<p>  如果我们有一个公共模块提供给外部访问，如下:</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// common.js</span></span><br><span class="line"><span class="keyword">import</span> A <span class="keyword">from</span> <span class="string">'./A'</span>;</span><br><span class="line"><span class="keyword">import</span> B <span class="keyword">from</span> <span class="string">'./B'</span>;</span><br><span class="line"><span class="keyword">import</span> C <span class="keyword">from</span> <span class="string">'./C'</span>;</span><br><span class="line"><span class="keyword">export</span> &#123;</span><br><span class="line">  A,</span><br><span class="line">  B,</span><br><span class="line">  C</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; A &#125; <span class="keyword">from</span> <span class="string">'./common'</span>;</span><br></pre></td></tr></table></figure>
+<p>  此时，虽然我们在main.js中只引入了A模块，但实际B，C模块代码也被执行了。</p>
+<p>  我们可以使用Getter属性优化导出方式。具体代码如下：</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.export &#123;</span><br><span class="line">  <span class="keyword">get</span> a()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">require</span>(<span class="string">'a'</span>)</span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">get</span> b()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">require</span>(<span class="string">'a'</span>)</span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">get</span> c()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">require</span>(<span class="string">'a'</span>)</span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; a &#125; <span class="keyword">from</span> <span class="string">'./common'</span>;</span><br></pre></td></tr></table></figure>
+<p>  这种在main.js中需要等到我们使用A模块的是才会真正执行require(‘./A’)，并且不会加载B、C模块。从而达到的模块的按需加载和动态加载效果。</p>
+
+	
+	</div>
+  <a type="button" href="/goku.github.io/2019/04/17/import导入机制的优化/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/goku.github.io/2019/04/17/Algorithm-0/">Algorithm--0</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-04-17  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="计算两数字的和"><a href="#计算两数字的和" class="headerlink" title="计算两数字的和"></a>计算两数字的和</h1><p>  问题描述：</p>
+<pre><code>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那两个整数，并返回他们的数组下标。
+
+你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
+
+示例:
+
+  给定 nums = [2, 7, 11, 15], target = 9
+
+  因为 nums[0] + nums[1] = 2 + 7 = 9
+
+  所以返回 [0, 1]
+</code></pre><p>  分析：</p>
+<blockquote>
+<p>方法一：暴力遍历<br>遍历每个元素x，查找是否存在一个与target-x相等的目标元素。<br>时间复杂度：O(n^2)<br>空间复杂度：O(1)</p>
+</blockquote>
+<blockquote>
+<p>方法二：两遍哈希表<br>使用哈希表，保持数组中每个元素与其对索引相对应。<br>先遍历一遍数组初始化哈希表。<br>再遍历一次数组判断哈希表中是否存在target-nums[i],注意该目标不能是nums[i]本身。<br>用空间换取时间。<br>时间复杂度：O(n)<br>空间复杂度：O(n)</p>
+</blockquote>
+<blockquote>
+<p>方法三：一遍哈希表<br>事实上，我们可以一遍完成。在迭代并将元素插入表中的同时，检查当前表中元素是否已经存在存在当前元素所对应的元素。如果存在，则找到对应解。<br>时间复杂度：O(n)<br>空间复杂度：O(n)</p>
+</blockquote>
+<p>  代码实现：</p>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* @param &#123;number[]&#125; nums</span></span><br><span class="line"><span class="comment">* @param &#123;number&#125; target</span></span><br><span class="line"><span class="comment">* @return &#123;number[]&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> twoSum = <span class="function"><span class="keyword">function</span>(<span class="params">nums, target</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; nums.length; i++)&#123;</span><br><span class="line">        <span class="keyword">let</span> complement = target - nums[i];     </span><br><span class="line">        <span class="keyword">if</span>(map.has(complement))&#123;</span><br><span class="line">            <span class="keyword">return</span> [map.get(complement),i];</span><br><span class="line">        &#125;</span><br><span class="line">        map.set(nums[i],i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> [];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试用例</span></span><br><span class="line">输入 </span><br><span class="line">[<span class="number">2</span>,<span class="number">7</span>,<span class="number">11</span>,<span class="number">15</span>]</span><br><span class="line"><span class="number">9</span></span><br><span class="line">输出 </span><br><span class="line">[<span class="number">0</span>,<span class="number">1</span>]</span><br><span class="line">预期</span><br><span class="line">[<span class="number">0</span>,<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+</code></pre>
+	
+	</div>
+  <a type="button" href="/goku.github.io/2019/04/17/Algorithm-0/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/goku.github.io/2019/04/12/provisional-header/">provisional header and http info</a>
 		</h3>
 		</div>
@@ -233,6 +368,18 @@ var _hmt = _hmt || [];
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/goku.github.io/2019/04/17/Algorithm-1/"><i class="fa fa-file-o"></i>Algorithm-1</a>
+      </li>
+    
+      <li>
+        <a href="/goku.github.io/2019/04/17/import导入机制的优化/"><i class="fa fa-file-o"></i>import导入机制的优化</a>
+      </li>
+    
+      <li>
+        <a href="/goku.github.io/2019/04/17/Algorithm-0/"><i class="fa fa-file-o"></i>Algorithm--0</a>
+      </li>
     
       <li>
         <a href="/goku.github.io/2019/04/12/provisional-header/"><i class="fa fa-file-o"></i>provisional header and http...</a>
