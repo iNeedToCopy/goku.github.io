@@ -143,6 +143,72 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/goku.github.io/2019/04/29/全局作用域中，用-const-和-let-声明的变量不在-window-上，那到底在哪里？如何去获取？/">全局作用域中，用 const 和 let 声明的变量不在 window 上，那到底在哪里？如何去获取？</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-04-29  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="如题："><a href="#如题：" class="headerlink" title="如题："></a>如题：</h1>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在ES5中，顶层对象的属性和全局变量是等价的，var 命令和 function 命令声明的全局变量，自然也是顶层对象。</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">12</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.a); <span class="comment">// 12</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.f); <span class="comment">// f()&#123;&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//但ES6规定，var 命令和 function 命令声明的全局变量，依旧是顶层对象的属性，但 let命令、const命令、class命令声明的全局变量，不属于顶层对象的属性。</span></span><br><span class="line"><span class="keyword">let</span> aa = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> bb = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.aa); <span class="comment">// undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.bb); <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//其实在全局作用域中，用 let 和 const 声明的全局变量并没有在全局对象中，只是一个块级作用域（Script）中</span></span><br><span class="line"><span class="comment">//怎么获取？在定义变量的块级作用域中就能获取啊，既然不属于顶层对象，那就不加 window（global）呗。</span></span><br><span class="line"><span class="keyword">let</span> aa = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> bb = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(aa); <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(bb); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<h1 id="另外对于const和常量的常见问题"><a href="#另外对于const和常量的常见问题" class="headerlink" title="另外对于const和常量的常见问题:"></a>另外对于const和常量的常见问题:</h1>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> b = <span class="number">10</span>;</span><br><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"><span class="meta">    'use strict'</span></span><br><span class="line">    b = <span class="number">20</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(b);  <span class="comment">// Uncaught TypeError: Assignment to constant variable.</span></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>  解答：</p>
+<pre><code>1.函数表达式与函数声明不同，函数名只在该函数内部有效，并且此绑定是常量绑定。
+2.对于一个常量进行赋值，在 strict 模式下会报错，非 strict 模式下静默失败。
+3.IIFE中的函数是函数表达式，而不是函数声明。
+</code></pre><p>  简单改造上面的代码，使之分别打印 10 和 20：</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="number">10</span>;</span><br><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"><span class="meta">    'use strict'</span></span><br><span class="line">    <span class="keyword">var</span> b = <span class="number">20</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(b);</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="comment">//2.</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="number">10</span>;</span><br><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> b = <span class="number">20</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.b);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+	
+	</div>
+  <a type="button" href="/goku.github.io/2019/04/29/全局作用域中，用-const-和-let-声明的变量不在-window-上，那到底在哪里？如何去获取？/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/goku.github.io/2019/04/18/howBrowserWorks/">howBrowserWorks</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-04-18  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="打开浏览器访问http-google-com会发生什么呢？"><a href="#打开浏览器访问http-google-com会发生什么呢？" class="headerlink" title="打开浏览器访问http://google.com会发生什么呢？"></a>打开浏览器访问<a href="http://google.com会发生什么呢？" target="_blank" rel="noopener">http://google.com会发生什么呢？</a></h1><pre><code>进行DNS解析 --&gt; 请求页面 --&gt; 将响应标记化 --&gt; 解析HTML --&gt; 构件DOM树 --&gt; 构件Render树
+                                                                          ↓
+                                                            绘制 &lt;-- 布局Render树
+</code></pre><p>More info: <a href="http://arvindr21.github.io/howBrowserWorks" target="_blank" rel="noopener">浏览器工作原理简介</a></p>
+
+	
+	</div>
+  <a type="button" href="/goku.github.io/2019/04/18/howBrowserWorks/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/goku.github.io/2019/04/17/Algorithm-1/">Algorithm-1</a>
 		</h3>
 		</div>
@@ -370,6 +436,14 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/goku.github.io/2019/04/29/全局作用域中，用-const-和-let-声明的变量不在-window-上，那到底在哪里？如何去获取？/"><i class="fa fa-file-o"></i>全局作用域中，用 const 和 let 声明的变量不...</a>
+      </li>
+    
+      <li>
+        <a href="/goku.github.io/2019/04/18/howBrowserWorks/"><i class="fa fa-file-o"></i>howBrowserWorks</a>
+      </li>
+    
+      <li>
         <a href="/goku.github.io/2019/04/17/Algorithm-1/"><i class="fa fa-file-o"></i>Algorithm-1</a>
       </li>
     
@@ -379,10 +453,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/goku.github.io/2019/04/17/Algorithm-0/"><i class="fa fa-file-o"></i>Algorithm--0</a>
-      </li>
-    
-      <li>
-        <a href="/goku.github.io/2019/04/12/provisional-header/"><i class="fa fa-file-o"></i>provisional header and http...</a>
       </li>
     
   </ul>
