@@ -143,6 +143,36 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/goku.github.io/2019/06/11/关于JS-call-apply-bind和new操作符的实现/">关于JS call apply bind和new操作符的实现</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-06-11  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="call的实现"><a href="#call的实现" class="headerlink" title="call的实现"></a>call的实现</h1>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.call = <span class="function"><span class="keyword">function</span>(<span class="params">ctx,...args</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">const</span> context = ctx || global</span><br><span class="line">  <span class="keyword">const</span> hash = +<span class="keyword">new</span> <span class="built_in">Date</span>() <span class="comment">//避免重名</span></span><br><span class="line">  context[hash] = <span class="keyword">this</span> <span class="comment">//缓存this，调用call后删掉</span></span><br><span class="line">  <span class="keyword">const</span> result = context[hash](...args)</span><br><span class="line">  <span class="keyword">delete</span> context[hash]</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="aplly的实现"><a href="#aplly的实现" class="headerlink" title="aplly的实现"></a>aplly的实现</h1>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.call = <span class="function"><span class="keyword">function</span>(<span class="params">ctx,...args</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">const</span> context = ctx || global</span><br><span class="line">  <span class="keyword">const</span> hash = +<span class="keyword">new</span> <span class="built_in">Date</span>() <span class="comment">//避免重名</span></span><br><span class="line">  context[hash] = <span class="keyword">this</span> <span class="comment">//缓存this，调用call后删掉</span></span><br><span class="line">  <span class="keyword">const</span> result = context[hash](...args) <span class="comment">//扩展运算符的便利  所以不用再处理参数的问题</span></span><br><span class="line">  <span class="keyword">delete</span> context[hash]</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="bind的实现"><a href="#bind的实现" class="headerlink" title="bind的实现"></a>bind的实现</h1>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">context, ...rest</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 判断绑定bind方法的是不是函数</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span> !== <span class="string">'function'</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'invalid invoked!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">   <span class="comment">// 绑定函数赋值给self</span></span><br><span class="line">  <span class="keyword">const</span> self = <span class="keyword">this</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 返回函数的执行结果</span></span><br><span class="line">    <span class="comment">// 判断函数是作为构造函数还是普通函数</span></span><br><span class="line">    <span class="comment">// 构造函数this instanceof fNOP返回true，将绑定函数的this指向该实例，可以让实例获得来自绑定函数的值。</span></span><br><span class="line">    <span class="comment">// 当作为普通函数时，this 指向 window，此时结果为 false，将绑定函数的 this 指向 context</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> <span class="keyword">instanceof</span> F) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> self(...rest, ...args)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> self.apply(context, rest.concat(args))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="new的实现"><a href="#new的实现" class="headerlink" title="new的实现"></a>new的实现</h1>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// new操作符一般经历以下四个步骤</span></span><br><span class="line"><span class="comment">// 1.创建一个新的对象；</span></span><br><span class="line"><span class="comment">// 2.将构造函数的作用域赋值给新对象（因此this就指向了这个新对象）</span></span><br><span class="line"><span class="comment">// 3.执行函数中的代码（为这个对象添加新的属性）</span></span><br><span class="line"><span class="comment">// 4.返回新的对象</span></span><br><span class="line"><span class="keyword">var</span> New = <span class="function">(<span class="params">f</span>) =&gt;</span> &#123;<span class="comment">//f就是构造函数</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;<span class="comment">//获取给构造函数的参数</span></span><br><span class="line">  <span class="keyword">var</span> o = &#123;<span class="attr">__proto__</span>:f.prototype&#125;<span class="comment">//获取构造函数的原型，赋值给__proto__指针</span></span><br><span class="line">  f.call(o,...args)<span class="comment">//获取参数调用构造函数，继承原型的属性方法</span></span><br><span class="line">  <span class="keyword">return</span> o</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/goku.github.io/2019/06/11/关于JS-call-apply-bind和new操作符的实现/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/goku.github.io/2019/04/29/全局作用域中，用-const-和-let-声明的变量不在-window-上，那到底在哪里？如何去获取？/">全局作用域中，用 const 和 let 声明的变量不在 window 上，那到底在哪里？如何去获取？</a>
 		</h3>
 		</div>
@@ -436,6 +466,10 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/goku.github.io/2019/06/11/关于JS-call-apply-bind和new操作符的实现/"><i class="fa fa-file-o"></i>关于JS call apply bind和new操作符...</a>
+      </li>
+    
+      <li>
         <a href="/goku.github.io/2019/04/29/全局作用域中，用-const-和-let-声明的变量不在-window-上，那到底在哪里？如何去获取？/"><i class="fa fa-file-o"></i>全局作用域中，用 const 和 let 声明的变量不...</a>
       </li>
     
@@ -449,10 +483,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/goku.github.io/2019/04/17/import导入机制的优化/"><i class="fa fa-file-o"></i>import导入机制的优化</a>
-      </li>
-    
-      <li>
-        <a href="/goku.github.io/2019/04/17/Algorithm-0/"><i class="fa fa-file-o"></i>Algorithm--0</a>
       </li>
     
   </ul>
