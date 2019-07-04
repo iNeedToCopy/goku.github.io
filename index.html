@@ -143,6 +143,47 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/goku.github.io/2019/07/04/typescript中的泛型/">typescript中的泛型</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-07-04  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="泛型的认识"><a href="#泛型的认识" class="headerlink" title="泛型的认识"></a>泛型的认识</h1><ul>
+<li>在大多数具有类型限制的语言中都会有泛型这一概念，typescript作为JavaScript的超集自然也具有这一特性</li>
+<li>从字面意思可以理解到，泛也就是指代众多，涵盖大多数的意思，泛型在计算机语言中也就是指代众多的类型</li>
+<li>TypeScript也实现了类型于C#和Java的泛型以实现类型的参数化，通常使用T,E,U等表示泛型，经常可以看见这样的代码<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params">args:any</span>):<span class="title">any</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 如果我们希望函数可以根据输入的参数的类型来确定输出的类型，</span></span><br><span class="line"><span class="comment">* 就需要在代码里面加上很多类型判断来确保输出参数的一致，</span></span><br><span class="line"><span class="comment">* 但是这样写会写很多没必要的验证代码，从而引入泛型</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span>&gt;(<span class="params">args:T</span>):<span class="title">T</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br><span class="line">log(<span class="string">'test genericity'</span>); <span class="comment">//log 'test genericity'</span></span><br><span class="line"></span><br><span class="line">log&lt;string&gt;(<span class="string">'test genericity'</span>); <span class="comment">//log 'test genericity'</span></span><br><span class="line"></span><br><span class="line">log&lt;string&gt;(<span class="number">10086</span>); <span class="comment">//Argument of type '10086' is not assignable to parameter of type 'string'.</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 引入泛型之后，相当于给我们的容器或者函数贴上了类型的标签，</span></span><br><span class="line"><span class="comment">* 只能允许一个类型的变量传入，传入过后就会以此类型作为参数进行一系列的验证，</span></span><br><span class="line"><span class="comment">* 在调用中可以显示的声明泛型的类型，在typescript的编译期间就会检测类型是否一致，及时的给出警告和报错</span></span><br><span class="line"><span class="comment">* 这样就省去了大部分的参数验证，一切都交给编译器了</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="泛型的更多写法"><a href="#泛型的更多写法" class="headerlink" title="泛型的更多写法"></a>泛型的更多写法</h1><ul>
+<li><p>泛型数组</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span>&gt;(<span class="params">args:T[]</span>):<span class="title">T</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> args[<span class="number">0</span>];</span><br><span class="line">&#125;<span class="comment">//或者</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span>&gt;(<span class="params">args:<span class="built_in">Array</span>&lt;T&gt;</span>):<span class="title">T</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> args[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line">log&lt;<span class="built_in">string</span>&gt;([<span class="string">'test genericity'</span>]); <span class="comment">//log 'test genericity'</span></span><br><span class="line"></span><br><span class="line">log&lt;<span class="built_in">number</span>&gt;([<span class="number">1</span>,<span class="number">2</span>]); <span class="comment">//log '1'</span></span><br><span class="line"></span><br><span class="line">log&lt;<span class="literal">undefined</span>&gt;([]);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>泛型类型的限制</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过泛型继承限制类型</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">number</span>&gt;(<span class="params">args: T</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> logType &#123;</span><br><span class="line">    &lt;T <span class="keyword">extends</span> <span class="built_in">number</span>&gt;(args: T): T</span><br><span class="line">&#125;<span class="comment">// number类型也可以是自定义的</span></span><br><span class="line"><span class="keyword">var</span> LOG: logType = log;<span class="comment">// 接口和实际的泛型参数要一致</span></span><br><span class="line">log(<span class="string">'123'</span>);<span class="comment">// Argument of type '"123"' is not assignable to parameter of type 'number'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过声明时显示的限制泛型类型</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span>&gt;(<span class="params">args: T</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> logType&lt;T&gt; &#123;</span><br><span class="line">    (args: T): T</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> LOG: logType&lt;<span class="built_in">number</span>&gt; = log;</span><br><span class="line">LOG(<span class="string">'123'</span>);<span class="comment">//Argument of type '"123"' is not assignable to parameter of type 'number'.</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+	
+	</div>
+  <a type="button" href="/goku.github.io/2019/07/04/typescript中的泛型/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/goku.github.io/2019/06/12/常见的一些js方法的实现/">常见的一些js方法的实现</a>
 		</h3>
 		</div>
@@ -494,6 +535,10 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/goku.github.io/2019/07/04/typescript中的泛型/"><i class="fa fa-file-o"></i>typescript中的泛型</a>
+      </li>
+    
+      <li>
         <a href="/goku.github.io/2019/06/12/常见的一些js方法的实现/"><i class="fa fa-file-o"></i>常见的一些js方法的实现</a>
       </li>
     
@@ -507,10 +552,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/goku.github.io/2019/04/18/howBrowserWorks/"><i class="fa fa-file-o"></i>howBrowserWorks</a>
-      </li>
-    
-      <li>
-        <a href="/goku.github.io/2019/04/17/Algorithm-1/"><i class="fa fa-file-o"></i>Algorithm-1</a>
       </li>
     
   </ul>

@@ -1,0 +1,257 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>typescript中的泛型 | goku</title>
+  <meta name="author" content="goku">
+  
+  <meta name="description" content="记录一切想记录的">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="typescript中的泛型">
+  <meta property="og:site_name" content="goku">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/goku.github.io/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/goku.github.io/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/goku.github.io/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/goku.github.io/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/goku.github.io/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/goku.github.io/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/goku.github.io/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/goku.github.io/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/goku.github.io/">goku</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/goku.github.io/archives" title="All the articles.">
+			  <i class></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/goku.github.io/categories" title="All the categories.">
+			  <i class></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/goku.github.io/tags" title="All the tags.">
+			  <i class></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/goku.github.io/about" title="About me.">
+			  <i class></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/goku.github.io/atom.xml" title="Subscribe me.">
+			  <i class></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> typescript中的泛型</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h1 id="泛型的认识"><a href="#泛型的认识" class="headerlink" title="泛型的认识"></a>泛型的认识</h1><ul>
+<li>在大多数具有类型限制的语言中都会有泛型这一概念，typescript作为JavaScript的超集自然也具有这一特性</li>
+<li>从字面意思可以理解到，泛也就是指代众多，涵盖大多数的意思，泛型在计算机语言中也就是指代众多的类型</li>
+<li>TypeScript也实现了类型于C#和Java的泛型以实现类型的参数化，通常使用T,E,U等表示泛型，经常可以看见这样的代码<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params">args:any</span>):<span class="title">any</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 如果我们希望函数可以根据输入的参数的类型来确定输出的类型，</span></span><br><span class="line"><span class="comment">* 就需要在代码里面加上很多类型判断来确保输出参数的一致，</span></span><br><span class="line"><span class="comment">* 但是这样写会写很多没必要的验证代码，从而引入泛型</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span>&gt;(<span class="params">args:T</span>):<span class="title">T</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br><span class="line">log(<span class="string">'test genericity'</span>); <span class="comment">//log 'test genericity'</span></span><br><span class="line"></span><br><span class="line">log&lt;string&gt;(<span class="string">'test genericity'</span>); <span class="comment">//log 'test genericity'</span></span><br><span class="line"></span><br><span class="line">log&lt;string&gt;(<span class="number">10086</span>); <span class="comment">//Argument of type '10086' is not assignable to parameter of type 'string'.</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 引入泛型之后，相当于给我们的容器或者函数贴上了类型的标签，</span></span><br><span class="line"><span class="comment">* 只能允许一个类型的变量传入，传入过后就会以此类型作为参数进行一系列的验证，</span></span><br><span class="line"><span class="comment">* 在调用中可以显示的声明泛型的类型，在typescript的编译期间就会检测类型是否一致，及时的给出警告和报错</span></span><br><span class="line"><span class="comment">* 这样就省去了大部分的参数验证，一切都交给编译器了</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="泛型的更多写法"><a href="#泛型的更多写法" class="headerlink" title="泛型的更多写法"></a>泛型的更多写法</h1><ul>
+<li><p>泛型数组</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span>&gt;(<span class="params">args:T[]</span>):<span class="title">T</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> args[<span class="number">0</span>];</span><br><span class="line">&#125;<span class="comment">//或者</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span>&gt;(<span class="params">args:<span class="built_in">Array</span>&lt;T&gt;</span>):<span class="title">T</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> args[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line">log&lt;<span class="built_in">string</span>&gt;([<span class="string">'test genericity'</span>]); <span class="comment">//log 'test genericity'</span></span><br><span class="line"></span><br><span class="line">log&lt;<span class="built_in">number</span>&gt;([<span class="number">1</span>,<span class="number">2</span>]); <span class="comment">//log '1'</span></span><br><span class="line"></span><br><span class="line">log&lt;<span class="literal">undefined</span>&gt;([]);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>泛型类型的限制</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过泛型继承限制类型</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">number</span>&gt;(<span class="params">args: T</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> logType &#123;</span><br><span class="line">    &lt;T <span class="keyword">extends</span> <span class="built_in">number</span>&gt;(args: T): T</span><br><span class="line">&#125;<span class="comment">// number类型也可以是自定义的</span></span><br><span class="line"><span class="keyword">var</span> LOG: logType = log;<span class="comment">// 接口和实际的泛型参数要一致</span></span><br><span class="line">log(<span class="string">'123'</span>);<span class="comment">// Argument of type '"123"' is not assignable to parameter of type 'number'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过声明时显示的限制泛型类型</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>&lt;<span class="title">T</span>&gt;(<span class="params">args: T</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> logType&lt;T&gt; &#123;</span><br><span class="line">    (args: T): T</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> LOG: logType&lt;<span class="built_in">number</span>&gt; = log;</span><br><span class="line">LOG(<span class="string">'123'</span>);<span class="comment">//Argument of type '"123"' is not assignable to parameter of type 'number'.</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/goku.github.io/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/goku.github.io/2019/06/12/常见的一些js方法的实现/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-07-04 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2019 goku
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/goku.github.io/js/jquery.imagesloaded.min.js"></script>
+<script src="/goku.github.io/js/gallery.js"></script>
+<script src="/goku.github.io/js/bootstrap.min.js"></script>
+<script src="/goku.github.io/js/main.js"></script>
+<script src="/goku.github.io/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/goku.github.io/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/goku.github.io/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>
